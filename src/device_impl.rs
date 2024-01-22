@@ -199,4 +199,17 @@ where
             IC::get_resolution_mask(),
         ))
     }
+
+    /// Get the hysteresis temperature (celsius).
+    pub fn get_hysteresis_temperature(&mut self) -> Result<f32, Error<E>>{
+        let mut data = [0; 2];
+        self.i2c
+            .write_read(self.address, &[Register::T_HYST], &mut data)
+            .map_err(Error::I2C)?;
+        Ok(conversion::convert_temp_from_register(
+            data[0],
+            data[1], 
+            IC::get_resolution_mask(),
+        ))
+    }
 }
